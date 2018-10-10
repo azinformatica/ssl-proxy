@@ -4,6 +4,7 @@ function start {
     createNoSslNginxConf
     startNginxInBackground
     enableSsl
+    createSslNginxConf
     stopNginx
     startNginxInForeground
 }
@@ -13,7 +14,7 @@ function enableSsl {
         renewSslCertificate
     else
         createSslCertificate
-        createSslPublicKey
+        createSslDhparam
     fi
 }
 
@@ -26,12 +27,11 @@ function createSslCertificate {
     if ! [[ -d "/etc/letsencrypt/live/${PROXY_DOMAIN}" ]]; then
         echo "Creating SSL certificate with certbot"
         certbot --nginx certonly -m $PROXY_EMAIL --agree-tos --no-eff-email --redirect --expand -d $PROXY_DOMAIN
-        createSslNginxConf
     fi
 }
 
 function createNoSslNginxConf {
-    if ! [[ -f "/etc/nginx/conf.d/nossl.conf" ]]; then
+    if [ ! -f /etc/nginx/conf.d/nossl.conf ] && [ ! -f /etc/nginx/conf.d/ssl.conf ]; then
         echo "Creating nginx configuration file (nossl.conf)"
         envsubst '${PROXY_DOMAIN} ${PROXY_PASS}' < /etc/nginx/conf.d/nossl.template > /etc/nginx/conf.d/nossl.conf
         printFile /etc/nginx/conf.d/nossl.conf
@@ -39,15 +39,21 @@ function createNoSslNginxConf {
 }
 
 function createSslNginxConf {
-    if ! [[ -f "/etc/nginx/conf.d/ssl.conf" ]]; then
+    if  [ ! -f /etc/nginx/conf.d/ssl.conf ]; then
         echo "Creating nginx configuration file (ssl.conf)"
         envsubst '${PROXY_DOMAIN} ${PROXY_PASS}' < /etc/nginx/conf.d/ssl.template > /etc/nginx/conf.d/ssl.conf
         printFile /etc/nginx/conf.d/ssl.conf
+        removeNoSslNginConf
+    fi
+}
+
+function removeNoSslNginConf {
+    if [ -f /etc/nginx/conf.d/nossl.conf ]; then
         rm -f /etc/nginx/conf.d/nossl.conf
     fi
 }
 
-function createSslPublicKey {
+function createSslDhparam {
     if ! [[ -f "/etc/ssl/certs/dhparam.pem" ]]; then
         echo "Creating a public key"
         openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048

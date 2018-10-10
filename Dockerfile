@@ -21,5 +21,9 @@ COPY files/nossl.template /etc/nginx/conf.d/nossl.template
 COPY files/startup.sh /opt/proxy/startup.sh
 RUN chmod +x /opt/proxy/startup.sh
 
+# adds certbot cert renewal job to cron
+COPY files/crontab /tmp/crontab-certbot
+RUN (crontab -l; cat /tmp/crontab-certbot) | crontab -
+
 WORKDIR /opt/proxy
 CMD ./startup.sh

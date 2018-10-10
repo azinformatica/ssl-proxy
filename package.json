@@ -1,6 +1,6 @@
 {
   "name": "ssl-proxy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "scripts": {
     "deploy": "docker build -t azinformatica/$npm_package_name:$npm_package_version . && docker tag azinformatica/$npm_package_name:$npm_package_version azinformatica/$npm_package_name:latest && docker push azinformatica/$npm_package_name:$npm_package_version && docker push azinformatica/$npm_package_name:latest"

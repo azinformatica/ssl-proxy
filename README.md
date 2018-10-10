@@ -23,7 +23,7 @@ Then, if you want to save the certificates (highly recommended), simply map the 
 version: '3'
 services:
   myproxy:
-    image: azinformatica/ssl-proxy:latest
+    image: azinformatica/ssl-proxy
     ports:
       - "80:80"
       - "443:443"

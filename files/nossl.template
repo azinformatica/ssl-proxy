@@ -1,0 +1,9 @@
+server {
+    server_name ${PROXY_DOMAIN};
+    listen 80 default_server;
+
+    location / {
+        index index.html index.htm;
+        root /usr/share/nginx/html;
+    }
+}

@@ -33,7 +33,7 @@ function createSslCertificate {
 function createNoSslNginxConf {
     if ! [[ -f "/etc/nginx/conf.d/nossl.conf" ]]; then
         echo "Creating nginx configuration file (nossl.conf)"
-        envsubst '${PROXY_DOMAIN} ${PROXY_PORT} ${PROXY_PASS}' < /etc/nginx/conf.d/nossl.template > /etc/nginx/conf.d/nossl.conf
+        envsubst '${PROXY_DOMAIN} ${PROXY_PASS}' < /etc/nginx/conf.d/nossl.template > /etc/nginx/conf.d/nossl.conf
         printFile /etc/nginx/conf.d/nossl.conf
     fi
 }
@@ -41,7 +41,7 @@ function createNoSslNginxConf {
 function createSslNginxConf {
     if ! [[ -f "/etc/nginx/conf.d/ssl.conf" ]]; then
         echo "Creating nginx configuration file (ssl.conf)"
-        envsubst '${PROXY_DOMAIN} ${PROXY_PORT} ${PROXY_PASS}' < /etc/nginx/conf.d/ssl.template > /etc/nginx/conf.d/ssl.conf
+        envsubst '${PROXY_DOMAIN} ${PROXY_PASS}' < /etc/nginx/conf.d/ssl.template > /etc/nginx/conf.d/ssl.conf
         printFile /etc/nginx/conf.d/ssl.conf
         rm -f /etc/nginx/conf.d/nossl.conf
     fi

@@ -6,8 +6,8 @@ server {
     server_name ${PROXY_DOMAIN};
     listen 443 ssl;
 
-    ssl_certificate /etc/letsencrypt/live/rapizap.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/rapizap.com/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/${PROXY_DOMAIN}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${PROXY_DOMAIN}/privkey.pem;
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
